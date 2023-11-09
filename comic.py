@@ -32,15 +32,11 @@ def create_app(size='400x300', title='EW_Asset_System', shrink=False):
 def update_btn():
     keys = entry.get()
     thread = Thread(target=search_comic, args=(keys,))
-    thread.start()  # 使用start() 啟動線程
-    if thread.is_alive():
-        read_btn.config(state='normal', fg='black')
-        label2.config(text='查詢完畢!', fg='green')
-        showinfo_btn.config(state='normal', fg='black')
-        clear_btn.config(state='normal', fg='black')
+    thread.start()
 
 
 def search_comic(keys):
+    label2.config(text='查詢中......!', fg='red')
     datas = []
     try:
         url = 'https://www.manhuaren.com/search/'
@@ -67,6 +63,10 @@ def search_comic(keys):
         df = pd.DataFrame(datas, columns=['Title', 'Link', 'Info', 'Img_url'])
         for row in df.itertuples(index=False):
             list_field.insert(tk.END, row)
+            label2.config(text='查詢完畢!', fg='green')
+            read_btn.config(state='normal', fg='black')
+            showinfo_btn.config(state='normal', fg='black')
+            clear_btn.config(state='normal', fg='black')
 
     except Exception as e:
         print(e)
@@ -109,6 +109,10 @@ def clear_result():
     if list_field.size() > 0:
         list_field.delete(0, 'end')
         entry.delete(0, 'end')
+        label2.config(text='查找狀態', fg='black', font=font1)
+        read_btn.config(state='disabled')
+        showinfo_btn.config(state='disabled')
+        clear_btn.config(state='disabled')
 
 
 app = create_app(size=size, title='Comic App', shrink=True)
