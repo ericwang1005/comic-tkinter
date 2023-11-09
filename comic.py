@@ -29,21 +29,6 @@ def create_app(size='400x300', title='EW_Asset_System', shrink=False):
     return app
 
 
-def find_catagorie(chrome):
-    url = 'https://www.manhuaren.com/search/'
-    chrome = get_chrome(url, hide=True)
-    soup = BeautifulSoup(chrome.page_source, 'lxml')
-    catagories = soup.find('ul', class_='search-class').findAll('li')
-    datas = []
-    for c in catagories:
-        type_name = c.text.strip()
-        type_link = 'https://www.manhuaren.com/'+c.find('a').get('href')
-        type_img_url = c.find('img').get('src')
-        datas.append([type_name, type_link, type_img_url])
-    # df = pd.DataFrame(datas, columns=['分類', '連結', '圖片連結'])
-    return datas
-
-
 def update_btn():
     keys = entry.get()
     thread = Thread(target=search_comic, args=(keys,))
